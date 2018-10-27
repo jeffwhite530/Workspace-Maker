@@ -206,8 +206,7 @@ def rmworkspace(command_args):
 			os.remove(workspace_obj.obj_file_path)
 
 		else:
-			if command_args.debug_mode is True:
-				print("DEBUG: Workspace", workspace_obj.path, "has not yet expired, skipping")
+			print("Workspace", workspace_obj.path, "has not yet expired, skipping")
 
 
 

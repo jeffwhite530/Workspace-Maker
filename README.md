@@ -38,14 +38,17 @@ In order to compile and install Workspace Maker you will need:
 * gcc (or another C compiler)
 * Python 3's development headers (libpython3-dev on Ubuntu systems)
 
-* Edit src/workspace_maker.py3 and set **WORKSPACE_ROOT_DIR** to where you want to store workspaces.  Ensure only root can write to this directory.
-* Edit src/workspace_maker.py3 and set **WORKSPACE_LIFETIME_DAYS** to how many days you want the workspace to exist before deletion.
+Before compiling:
+
+* Edit src/workspace_maker.py3 and set STORAGE_SPACES to be a list of where you want to store workspaces.  Ensure only root can write to these directories.
+* Edit src/workspace_maker.py3 and set WORKSPACE_LIFETIME_DAYS to how many days you want the workspace to exist before deletion.
 
 ### Automatic Build
 
 * ./build.sh
+* Move the files from bin/ to where you want to install it to (e.g. /usr/local/bin).
 
-### Manual Installation
+### Manual Build
 
 Run the following to compile Workspace Maker:
 

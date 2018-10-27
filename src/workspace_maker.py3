@@ -19,7 +19,8 @@ import shutil
 
 
 
-WORKSPACE_ROOT_DIR = "/wmtest"
+# Which storage spaces are allowed.  The first listed will be the default if none are given.
+STORAGE_SPACES = ["/wmtest", "/wmtest2"]
 WORKSPACE_LIFETIME_DAYS = 14
 
 
@@ -46,8 +47,8 @@ def get_workspaces():
 	"""
 	workspace_objs = list()
 
-	for fs_entry in os.listdir(WORKSPACE_ROOT_DIR):
-		entry_path = WORKSPACE_ROOT_DIR + os.path.sep + fs_entry
+	for fs_entry in os.listdir(command_args.storage):
+		entry_path = command_args.storage + os.path.sep + fs_entry
 
 		if not os.path.isfile(entry_path):
 			continue
@@ -94,7 +95,7 @@ def mkworkspace(command_args):
 
 		workspace_obj.name = workspace_obj.user + "_" + random_int_str_zeros
 
-	workspace_obj.path = WORKSPACE_ROOT_DIR + os.path.sep + workspace_obj.name
+	workspace_obj.path = command_args.storage + os.path.sep + workspace_obj.name
 
 	if command_args.debug_mode is True:
 		print("DEBUG: Workspace path:", workspace_obj.path)
@@ -136,7 +137,7 @@ def mkworkspace(command_args):
 
 
 	# Create the workspace object file
-	workspace_obj.obj_file_path = WORKSPACE_ROOT_DIR + os.path.sep + "." + workspace_obj.name + ".pkl"
+	workspace_obj.obj_file_path = command_args.storage + os.path.sep + "." + workspace_obj.name + ".pkl"
 
 	with open(workspace_obj.obj_file_path, "wb") as workspace_obj_file_handle:
 		pickle.dump(workspace_obj, workspace_obj_file_handle)
@@ -223,10 +224,27 @@ if __name__ == "__main__":
 							default=False, action="store_true",
 							help="Enable debug mode")
 
-	# TODO: Add storage option
+	parser.add_argument("-s", "--storage", dest="storage", metavar="PATH",
+							default=STORAGE_SPACES[0], action="store",
+							help="Which storage space to use for the workspace (Default: " + STORAGE_SPACES[0] + ")")
+
 	# TODO: Add lifetime days option
 
 	command_args = parser.parse_args()
+
+
+
+	# Sanity checks
+	if not command_args.storage.startswith("/"):
+		print("Storage option must be a path beginning with '/', exiting.", file=sys.stderr)
+
+		sys.exit(1)
+
+
+	if command_args.storage not in STORAGE_SPACES:
+		print("Storage spaces must be one of:", STORAGE_SPACES, file=sys.stderr)
+
+		sys.exit(1)
 
 
 

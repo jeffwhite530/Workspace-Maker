@@ -37,6 +37,7 @@ In order to compile and install Workspace Maker you will need:
 * Python 3 (>=3.4 reccomended)
 * gcc (or another C compiler)
 * Python 3's development headers (libpython3-dev on Ubuntu systems)
+* Ensure time and timezone are in sync across all systems which will use Workspace Maker
 
 Before compiling:
 

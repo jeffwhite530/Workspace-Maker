@@ -156,7 +156,28 @@ def lsworkspace(command_args):
 		print("DEBUG: Entering lsworkspace function")
 
 
-	workspace_objs = get_workspaces()
+	workspace_objs = list()
+
+
+	# If we were given a workspace name, only use that one
+	if command_args.workspace_name is not None:
+		workspace_obj_file_path = command_args.storage + os.path.sep + "." + command_args.workspace_name + ".pkl"
+
+		if os.path.exists(workspace_obj_file_path):
+			with open(workspace_obj_file_path, "rb") as workspace_obj_file_path_handle:
+				workspace_obj = pickle.load(workspace_obj_file_path_handle)
+
+			workspace_objs.append(workspace_obj)
+
+		else:
+			print("No workspace object file found for workspace", command_args.workspace_name, file=sys.stderr)
+
+			sys.exit(1)
+
+	else:
+		workspace_objs = get_workspaces()
+
+
 	our_workspace_objs = list()
 	current_user_uid = os.getuid()
 
@@ -165,7 +186,7 @@ def lsworkspace(command_args):
 	for workspace_obj in workspace_objs:
 		if current_user_uid != 0 and workspace_obj.uid != current_user_uid:
 			if command_args.debug_mode is True:
-				print("DEBUG: Skipping workspace as we are not its owner")
+				print("DEBUG: Skipping workspace", workspace_obj.name, "as we are not its owner")
 
 			continue
 
@@ -191,7 +212,27 @@ def rmworkspace(command_args):
 		sys.exit(1)
 
 
-	workspace_objs = get_workspaces()
+	workspace_objs = list()
+
+
+	# If we were given a workspace name, only use that one
+	if command_args.workspace_name is not None:
+		workspace_obj_file_path = command_args.storage + os.path.sep + "." + command_args.workspace_name + ".pkl"
+
+		if os.path.exists(workspace_obj_file_path):
+			with open(workspace_obj_file_path, "rb") as workspace_obj_file_path_handle:
+				workspace_obj = pickle.load(workspace_obj_file_path_handle)
+
+			workspace_objs.append(workspace_obj)
+
+		else:
+			print("No workspace object file found for workspace", command_args.workspace_name, file=sys.stderr)
+
+			sys.exit(1)
+
+
+	else:
+		workspace_objs = get_workspaces()
 
 
 	for workspace_obj in workspace_objs:

@@ -220,7 +220,7 @@ if __name__ == "__main__":
 							type=str, nargs="?",
                     		help="Name of the workspace to work with")
 
-	parser.add_argument("-d", "--debug", dest="debug_mode",
+	parser.add_argument("-D", "--debug", dest="debug_mode",
 							default=False, action="store_true",
 							help="Enable debug mode")
 

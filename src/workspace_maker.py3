@@ -33,8 +33,8 @@ class Workspace(object):
 		self.gid = None
 		self.user = None
 		self.group = None
-		self.workspace_name = None
-		self.workspace_path = None
+		self.name = None
+		self.path = None
 		self.expiration_datetime = None
 		self.expiration_pretty = None
 		self.obj_file_path = None
@@ -84,7 +84,7 @@ def mkworkspace(command_args):
 
 	# Were we given a workspace name?  If not, make one up.
 	if command_args.workspace_name is not None:
-		workspace_name = command_args.workspace_name
+		workspace_obj.name = command_args.workspace_name
 
 	else:
 		random_int = random.randint(0, 99999)

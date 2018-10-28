@@ -42,7 +42,7 @@ In order to compile and install Workspace Maker you will need:
 Before compiling:
 
 * Edit src/workspace_maker.py3 and set STORAGE_SPACES to be a list of where you want to store workspaces.  Ensure only root can write to these directories.
-* Edit src/workspace_maker.py3 and set WORKSPACE_LIFETIME_DAYS to how many days you want the workspace to exist before deletion.
+* Edit src/workspace_maker.py3 and set DEFAULT_LIFETIME_DAYS and MAX_LIFETIME_DAYS to how many days you want each workspace to exist before deletion.
 
 ### Automatic Build
 

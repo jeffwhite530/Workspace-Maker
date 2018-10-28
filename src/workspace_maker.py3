@@ -21,7 +21,14 @@ import shutil
 
 # Which storage spaces are allowed.  The first listed will be the default if none are given.
 STORAGE_SPACES = ["/wmtest", "/wmtest2"]
-WORKSPACE_LIFETIME_DAYS = 14
+
+# How long until workspaces expire
+DEFAULT_LIFETIME_DAYS = 14
+MAX_LIFETIME_DAYS = 14
+
+
+
+# DO NOT EDIT BELOW HERE
 
 
 
@@ -111,7 +118,7 @@ def mkworkspace(command_args):
 	# Determine an expiration date for the workspace
 	datetime_now = datetime.datetime.now()
 
-	datetime_delta = datetime.timedelta(days=WORKSPACE_LIFETIME_DAYS)
+	datetime_delta = datetime.timedelta(days=command_args.lifetime_days)
 
 	workspace_obj.expiration_datetime = datetime_now + datetime_delta
 
@@ -230,7 +237,6 @@ def rmworkspace(command_args):
 
 			sys.exit(1)
 
-
 	else:
 		workspace_objs = get_workspaces()
 
@@ -259,17 +265,19 @@ if __name__ == "__main__":
 
 	parser.add_argument("workspace_name", metavar="workspace",
 							type=str, nargs="?",
-                    		help="Name of the workspace to work with")
+							help="Name of the workspace to work with")
 
 	parser.add_argument("-D", "--debug", dest="debug_mode",
 							default=False, action="store_true",
 							help="Enable debug mode")
 
-	parser.add_argument("-s", "--storage", dest="storage", metavar="PATH",
-							default=STORAGE_SPACES[0], action="store",
-							help="Which storage space to use for the workspace (Default: " + STORAGE_SPACES[0] + ")")
+	parser.add_argument("-d", "--days", dest="lifetime_days", metavar="NUM",
+							default=DEFAULT_LIFETIME_DAYS, action="store", type=int,
+							help="Number of days until the workspace expires (Default: " + str(DEFAULT_LIFETIME_DAYS) + ")")
 
-	# TODO: Add lifetime days option
+	parser.add_argument("-s", "--storage", dest="storage", metavar="PATH",
+							default=STORAGE_SPACES[0], action="store", type=str,
+							help="Which storage space to use for the workspace (Default: " + STORAGE_SPACES[0] + ")")
 
 	command_args = parser.parse_args()
 
@@ -284,6 +292,12 @@ if __name__ == "__main__":
 
 	if command_args.storage not in STORAGE_SPACES:
 		print("Storage spaces must be one of:", STORAGE_SPACES, file=sys.stderr)
+
+		sys.exit(1)
+
+
+	if command_args.lifetime_days > MAX_LIFETIME_DAYS:
+		print("Requested lifetime of", command_args.lifetime_days, "greater than maximum of", MAX_LIFETIME_DAYS, file=sys.stderr)
 
 		sys.exit(1)
 

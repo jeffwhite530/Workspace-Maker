@@ -242,16 +242,37 @@ def rmworkspace(command_args):
 
 
 	for workspace_obj in workspace_objs:
+		# ** DANGER ** DEBUG ONLY: This will cause workspaces to be deleted immediately by pretending we are in the future
+		#datetime_now = datetime.datetime.now() + datetime.timedelta(days=1000)
+
 		datetime_now = datetime.datetime.now()
 
 		if datetime_now > workspace_obj.expiration_datetime:
 			print("Workspace", workspace_obj.path, "has expired, removing...")
+
+			# Create a lock directory.
+			# We shouldn't use fcntl.flock() as we need to support NFS (which "should" support locking) and other filesystems that may not support it.
+			try:
+				lock_dir = command_args.storage + os.path.sep + "." + command_args.workspace_name + ".lock"
+
+				os.mkdir(lock_dir)
+
+				if command_args.debug_mode is True:
+					print("DEBUG: Acquired lock at", lock_dir)
+
+			except:
+				print("Failed to obtain lock, skipping workspace", file=sys.stderr)
+
+				continue
 
 			# Remove the workspace
 			shutil.rmtree(workspace_obj.path)
 
 			# Remove the workspace object file
 			os.remove(workspace_obj.obj_file_path)
+
+			# Remove the lock
+			os.rmdir(lock_dir)
 
 		else:
 			print("Workspace", workspace_obj.path, "has not yet expired, skipping")

@@ -13,15 +13,36 @@ Usage Example
 -------------
 
 ```
+$ mkworkspace -h
+usage: mkworkspace [-h] [-D] [-d NUM] [-s PATH] [workspace]
+
+Create and manage storage workspaces.
+
+positional arguments:
+  workspace             Name of the workspace to work with
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -D, --debug           Enable debug mode
+  -d NUM, --days NUM    Number of days until the workspace expires (Default:
+                        14)
+  -s PATH, --storage PATH
+                        Which storage space to use for the workspace (Default:
+                        /wmtest)
+
+
 $ mkworkspace
 Workspace /wmtest/jeffwhite530_64497 created with expiration of 2018-11-10 at 04:46 PM
+
 
 $ lsworkspace
 Workspace /wmtest/jeffwhite530_64497 will expire on 2018-11-10 at 04:46 PM
 Workspace /wmtest/jeffwhite530_99373 will expire on 2018-11-10 at 03:27 PM
 
+
 $ rmworkspace
 Only root may remove workspaces, exiting.
+
 
 # rmworkspace
 Workspace /wmtest/jeffwhite530_99373 has not yet expired, skipping

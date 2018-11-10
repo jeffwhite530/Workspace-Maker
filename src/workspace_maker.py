@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
 	parser.add_argument("-d", "--days", dest="lifetime_days", metavar="NUM",
 							default=DEFAULT_LIFETIME_DAYS, action="store", type=int,
-							help="Number of days until the workspace expires (Default: " + str(DEFAULT_LIFETIME_DAYS) + ")")
+							help="Number of days until the workspace expires (Default: " + str(DEFAULT_LIFETIME_DAYS) + ", Max: " + str(MAX_LIFETIME_DAYS) + ")")
 
 	parser.add_argument("-s", "--storage", dest="storage", metavar="PATH",
 							default=STORAGE_SPACES[0], action="store", type=str,

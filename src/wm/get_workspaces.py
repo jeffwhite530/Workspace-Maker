@@ -15,8 +15,8 @@ def posix(command_args):
 	"""
 	workspace_objs = list()
 
-	for fs_entry in os.listdir(command_args.storage):
-		entry_path = command_args.storage + os.path.sep + fs_entry
+	for fs_entry in os.listdir(command_args.posix_storage):
+		entry_path = command_args.posix_storage + os.path.sep + fs_entry
 
 		if not os.path.isfile(entry_path):
 			continue

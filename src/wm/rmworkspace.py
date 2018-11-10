@@ -46,9 +46,9 @@ def posix(command_args):
 
 	for workspace_obj in workspace_objs:
 		# ** DANGER ** DEBUG ONLY: This will cause workspaces to be deleted immediately by pretending we are in the future
-		datetime_now = datetime.datetime.now() + datetime.timedelta(days=1000)
+		#datetime_now = datetime.datetime.now() + datetime.timedelta(days=1000)
 
-		#datetime_now = datetime.datetime.now()
+		datetime_now = datetime.datetime.now()
 
 		if datetime_now > workspace_obj.expiration_datetime:
 			print("Workspace", workspace_obj.path, "has expired, removing...")

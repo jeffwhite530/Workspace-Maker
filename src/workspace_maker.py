@@ -14,8 +14,9 @@ import wm
 
 
 
-# Which storage spaces are allowed.  The first listed will be the default if none are given.
-STORAGE_SPACES = ["/wmtest", "/wmtest2"]
+# Which storage spaces are allowed.  The first listed will be the default.  Give an empty list ("[]") to disable this feature.
+POSIX_STORAGE_SPACES = ["/wmtest", "/wmtest2"]
+#POSIX_STORAGE_SPACES = []
 
 # How long until workspaces expire
 DEFAULT_LIFETIME_DAYS = 14
@@ -28,17 +29,29 @@ MAX_LIFETIME_DAYS = 14
 
 
 def launch_mkworkspace(command_args):
-	wm.mkworkspace.posix(command_args)
+	if hasattr(command_args, "posix_storage"):
+		wm.mkworkspace.posix(command_args)
+
+	else:
+		print("Unable to determine storage type, none given?", file=sys.stderr)
 
 
 
 def launch_lsworkspace(command_args):
-	wm.lsworkspace.posix(command_args)
+	if hasattr(command_args, "posix_storage"):
+		wm.lsworkspace.posix(command_args)
+
+	else:
+		print("Unable to determine storage type, none given?", file=sys.stderr)
 
 
 
 def launch_rmworkspace(command_args):
-	wm.rmworkspace.posix(command_args)
+	if hasattr(command_args, "posix_storage"):
+		wm.rmworkspace.posix(command_args)
+
+	else:
+		print("Unable to determine storage type, none given?", file=sys.stderr)
 
 
 
@@ -59,27 +72,34 @@ if __name__ == "__main__":
 							default=DEFAULT_LIFETIME_DAYS, action="store", type=int,
 							help="Number of days until the workspace expires (Default: " + str(DEFAULT_LIFETIME_DAYS) + ", Max: " + str(MAX_LIFETIME_DAYS) + ")")
 
-	parser.add_argument("-s", "--storage", dest="storage", metavar="PATH",
-							default=STORAGE_SPACES[0], action="store", type=str,
-							help="Which storage space to use for the workspace (Default: " + STORAGE_SPACES[0] + ")")
+	# Enable the POSIX storage spaces feature only if we were configured with a space.
+	if len(POSIX_STORAGE_SPACES) > 0:
+		parser.add_argument("-s", "--storage", dest="posix_storage", metavar="PATH",
+							default=POSIX_STORAGE_SPACES[0], action="store", type=str,
+							help="Which storage space to use for the workspace (Default: " + POSIX_STORAGE_SPACES[0] + ")")
+
 
 	command_args = parser.parse_args()
 
 
 
 	# Sanity checks
-	if not command_args.storage.startswith("/"):
-		print("Storage option must be a path beginning with '/', exiting.", file=sys.stderr)
 
-		sys.exit(1)
+	# POSIX storage feature
+	if hasattr(command_args, "posix_storage"):
+		if not command_args.posix_storage.startswith("/"):
+			print("Storage space must be a path beginning with '/', exiting.", file=sys.stderr)
 
-
-	if command_args.storage not in STORAGE_SPACES:
-		print("Storage spaces must be one of:", STORAGE_SPACES, file=sys.stderr)
-
-		sys.exit(1)
+			sys.exit(1)
 
 
+		if command_args.posix_storage not in POSIX_STORAGE_SPACES:
+			print("Storage space must be one of:", POSIX_STORAGE_SPACES, file=sys.stderr)
+
+			sys.exit(1)
+
+
+	# Other checks
 	if command_args.lifetime_days > MAX_LIFETIME_DAYS:
 		print("Requested lifetime of", command_args.lifetime_days, "greater than maximum of", MAX_LIFETIME_DAYS, file=sys.stderr)
 

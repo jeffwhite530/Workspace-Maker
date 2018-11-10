@@ -253,14 +253,14 @@ def rmworkspace(command_args):
 			# Create a lock directory.
 			# We shouldn't use fcntl.flock() as we need to support NFS (which "should" support locking) and other filesystems that may not support it.
 			try:
-				lock_dir = command_args.storage + os.path.sep + "." + command_args.workspace_name + ".lock"
+				lock_dir = command_args.storage + os.path.sep + "." + workspace_obj.name + ".lock"
 
 				os.mkdir(lock_dir)
 
 				if command_args.debug_mode is True:
 					print("DEBUG: Acquired lock at", lock_dir)
 
-			except:
+			except OSError as err:
 				print("Failed to obtain lock, skipping workspace", file=sys.stderr)
 
 				continue

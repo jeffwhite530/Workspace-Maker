@@ -40,7 +40,7 @@ def posix(command_args):
 
 		workspace_obj.name = workspace_obj.user + "_" + random_int_str_zeros
 
-	workspace_obj.path = command_args.storage + os.path.sep + workspace_obj.name
+	workspace_obj.path = command_args.posix_storage + os.path.sep + workspace_obj.name
 
 	if command_args.debug_mode is True:
 		print("DEBUG: Workspace path:", workspace_obj.path)
@@ -82,7 +82,7 @@ def posix(command_args):
 
 
 	# Create the workspace object file
-	workspace_obj.obj_file_path = command_args.storage + os.path.sep + "." + workspace_obj.name + ".pkl"
+	workspace_obj.obj_file_path = command_args.posix_storage + os.path.sep + "." + workspace_obj.name + ".pkl"
 
 	with open(workspace_obj.obj_file_path, "wb") as workspace_obj_file_handle:
 		pickle.dump(workspace_obj, workspace_obj_file_handle)

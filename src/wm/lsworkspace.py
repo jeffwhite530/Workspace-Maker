@@ -19,7 +19,7 @@ def posix(command_args):
 
 	# If we were given a workspace name, only use that one
 	if command_args.workspace_name is not None:
-		workspace_obj_file_path = command_args.storage + os.path.sep + "." + command_args.workspace_name + ".pkl"
+		workspace_obj_file_path = command_args.posix_storage + os.path.sep + "." + command_args.workspace_name + ".pkl"
 
 		if os.path.exists(workspace_obj_file_path):
 			with open(workspace_obj_file_path, "rb") as workspace_obj_file_path_handle:

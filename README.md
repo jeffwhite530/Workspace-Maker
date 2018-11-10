@@ -25,7 +25,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -D, --debug           Enable debug mode
   -d NUM, --days NUM    Number of days until the workspace expires (Default:
-                        14)
+                        14, Max: 14)
   -s PATH, --storage PATH
                         Which storage space to use for the workspace (Default:
                         /wmtest)

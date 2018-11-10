@@ -62,19 +62,20 @@ In order to compile and install Workspace Maker you will need:
 
 Before compiling:
 
-* Edit src/workspace_maker.py3 and set STORAGE_SPACES to be a list of where you want to store workspaces.  Ensure only root can write to these directories.
-* Edit src/workspace_maker.py3 and set DEFAULT_LIFETIME_DAYS and MAX_LIFETIME_DAYS to how many days you want each workspace to exist before deletion.
+* Edit src/workspace_maker.py and set STORAGE_SPACES to be a list of where you want to store workspaces.  Ensure only root can write to these directories.
+* Edit src/workspace_maker.py and set DEFAULT_LIFETIME_DAYS and MAX_LIFETIME_DAYS to how many days you want each workspace to exist before deletion.
 
 ### Automatic Build
 
 * ./build.sh
 * Move the files from bin/ to where you want to install it to (e.g. /usr/local/bin).
+* Copy src/wm/ to where you want to install the Python module.  Alternatively, you can add it to your PYTHONPATH.  For example: PYTHONPATH=$PYTHONPATH:./src bin/mkworkspace
 
 ### Manual Build
 
 Run the following to compile Workspace Maker:
 
-* cython3 -3 --embed src/workspace_maker.py3 -o build/workspace_maker.c
+* cython3 -3 --embed src/workspace_maker.py -o build/workspace_maker.c
 * gcc build/workspace_maker.c $(python3-config --cflags --ldflags) -fPIC -o bin/workspace_maker
 
 This will produce an executable binary named workspace_maker in bin/.  Move that binary to where you want to install it (e.g. /usr/local/bin).
@@ -89,6 +90,8 @@ Next, create 3 symlinks to the program.  These are the commands you will use to 
 * ln -s workspace_maker bin/mkworkspace
 * ln -s workspace_maker bin/lsworkspace
 * ln -s workspace_maker bin/rmworkspace
+
+Copy src/wm/ to where you want to install the Python module.  Alternatively, you can add it to your PYTHONPATH.  For example: PYTHONPATH=$PYTHONPATH:./src bin/mkworkspace
 
 That's it!  You should now be able to run the commands mkworkspace, lsworkspace, and rmworkspace in order to invoke each function of Workspace Maker.
 

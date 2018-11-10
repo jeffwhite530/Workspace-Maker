@@ -9,7 +9,7 @@ rm -f bin/rmworkspace
 mkdir -p build
 mkdir -p bin
 
-cython3 -w . -3 --embed src/workspace_maker.py -o build/workspace_maker.c || exit $?
+cython3 -3 --embed src/workspace_maker.py -o build/workspace_maker.c || exit $?
 
 gcc build/workspace_maker.c $(python3-config --cflags --ldflags) -fPIC -o bin/workspace_maker || exit $?
 

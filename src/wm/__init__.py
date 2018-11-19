@@ -22,6 +22,8 @@ class Workspace(object):
 		self.name = None
 		self.path = None
 		self.expiration_datetime = None
+		# For Amazon S3 workspaces and others that can't hold a DateTime object
+		self.expiration_epoch = None
 		self.expiration_pretty = None
 		self.obj_file_path = None
 

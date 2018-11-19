@@ -29,15 +29,27 @@ optional arguments:
   -s PATH, --storage PATH
                         Which storage space to use for the workspace (Default:
                         /wmtest)
+  --s3                  Use Amazon S3 storage
+  --aws-config-file PATH
+                        Path to the AWS configuration file (Default:
+                        aws.conf)
 
 
 $ mkworkspace
 Workspace /wmtest/jeffwhite530_64497 created with expiration of 2018-11-10 at 04:46 PM
 
 
+$ mkworkspace --s3
+Workspace http://wm-bucket-jeffwhite530-61994.s3.amazonaws.com/ created with expiration of 2018-12-03 at 12:52 PM
+
+
 $ lsworkspace
 Workspace /wmtest/jeffwhite530_64497 will expire on 2018-11-10 at 04:46 PM
 Workspace /wmtest/jeffwhite530_99373 will expire on 2018-11-10 at 03:27 PM
+
+
+$ lsworkspace --s3
+Workspace http://wm-bucket-jeffwhite530-61994.s3.amazonaws.com/ will expire on 2018-12-03 at 12:52 PM
 
 
 $ rmworkspace
@@ -54,6 +66,7 @@ Installation
 
 In order to compile and install Workspace Maker you will need:
 
+* boto3 (Amazon AWS)
 * Cython
 * Python 3 (>=3.4 reccomended)
 * gcc (or another C compiler)
@@ -62,8 +75,9 @@ In order to compile and install Workspace Maker you will need:
 
 Before compiling:
 
-* Edit src/workspace_maker.py and set STORAGE_SPACES to be a list of where you want to store workspaces.  Ensure only root can write to these directories.
+* Edit src/workspace_maker.py and set POSIX_STORAGE_SPACES to be a list of where you want to store workspaces.  Ensure only root can write to these directories.
 * Edit src/workspace_maker.py and set DEFAULT_LIFETIME_DAYS and MAX_LIFETIME_DAYS to how many days you want each workspace to exist before deletion.
+* Edit src/workspace_maker.py and set AWS_CONFIG_FILE to where your config is or set to None to disable the option.
 
 ### Automatic Build
 

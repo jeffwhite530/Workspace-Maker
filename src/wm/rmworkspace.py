@@ -7,8 +7,45 @@ import sys
 import pickle
 import datetime
 import shutil
+import boto3
 import wm
 
+
+
+def amazon_s3(command_args):
+	if command_args.debug_mode is True:
+		print("DEBUG: Entering rmworkspace.amazon_s3")
+
+
+	os.environ["AWS_CONFIG_FILE"] = command_args.aws_config_file
+
+	
+	if os.getuid() != 0:
+		print("Only root may remove workspaces, exiting.", file=sys.stderr)
+
+		sys.exit(1)
+
+
+	workspace_objs = wm.get_workspaces.amazon_s3(command_args)
+
+	
+	for workspace_obj in workspace_objs:
+		datetime_now = datetime.datetime.now().timestamp()
+
+		if datetime_now > workspace_obj.expiration_epoch:
+			print("Workspace", workspace_obj.path, "has expired, removing...")
+
+			s3_resource = boto3.resource("s3")
+
+			bucket = s3_resource.Bucket("wm-bucket-" + workspace_obj.name)
+
+			# FIXME: How can we lock the bucket before doing this?
+			bucket.objects.all().delete()
+
+			bucket.delete()
+
+		else:
+			print("Workspace", workspace_obj.path, "has not yet expired, skipping")
 
 
 def posix(command_args):
@@ -45,9 +82,6 @@ def posix(command_args):
 
 
 	for workspace_obj in workspace_objs:
-		# ** DANGER ** DEBUG ONLY: This will cause workspaces to be deleted immediately by pretending we are in the future
-		#datetime_now = datetime.datetime.now() + datetime.timedelta(days=1000)
-
 		datetime_now = datetime.datetime.now()
 
 		if datetime_now > workspace_obj.expiration_datetime:

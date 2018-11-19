@@ -18,9 +18,15 @@ import wm
 POSIX_STORAGE_SPACES = ["/wmtest", "/wmtest2"]
 #POSIX_STORAGE_SPACES = []
 
+
 # How long until workspaces expire
 DEFAULT_LIFETIME_DAYS = 14
 MAX_LIFETIME_DAYS = 14
+
+
+# Amazon S3 support.  Set to "None" to disable.
+AWS_CONFIG_FILE = os.environ["HOME"] + os.path.sep + "aws.conf"
+#AWS_CONFIG_FILE = None
 
 
 
@@ -29,7 +35,10 @@ MAX_LIFETIME_DAYS = 14
 
 
 def launch_mkworkspace(command_args):
-	if hasattr(command_args, "posix_storage"):
+	if hasattr(command_args, "amazon_s3") and command_args.amazon_s3 is True:
+		wm.mkworkspace.amazon_s3(command_args)
+
+	elif hasattr(command_args, "posix_storage"):
 		wm.mkworkspace.posix(command_args)
 
 	else:
@@ -38,7 +47,10 @@ def launch_mkworkspace(command_args):
 
 
 def launch_lsworkspace(command_args):
-	if hasattr(command_args, "posix_storage"):
+	if hasattr(command_args, "amazon_s3") and command_args.amazon_s3 is True:
+		wm.lsworkspace.amazon_s3(command_args)
+
+	elif hasattr(command_args, "posix_storage"):
 		wm.lsworkspace.posix(command_args)
 
 	else:
@@ -47,7 +59,10 @@ def launch_lsworkspace(command_args):
 
 
 def launch_rmworkspace(command_args):
-	if hasattr(command_args, "posix_storage"):
+	if hasattr(command_args, "amazon_s3") and command_args.amazon_s3 is True:
+		wm.rmworkspace.amazon_s3(command_args)
+
+	elif hasattr(command_args, "posix_storage"):
 		wm.rmworkspace.posix(command_args)
 
 	else:
@@ -78,6 +93,15 @@ if __name__ == "__main__":
 							default=POSIX_STORAGE_SPACES[0], action="store", type=str,
 							help="Which storage space to use for the workspace (Default: " + POSIX_STORAGE_SPACES[0] + ")")
 
+	# Enable Amazon S3 support if we were given a credentials file
+	if AWS_CONFIG_FILE is not None:
+		parser.add_argument("--s3", dest="amazon_s3",
+							default=False, action="store_true",
+							help="Use Amazon S3 storage")
+
+		parser.add_argument("--aws-config-file", dest="aws_config_file", metavar="PATH",
+							default=AWS_CONFIG_FILE, action="store", type=str,
+							help="Path to the AWS configuration file (Default: " + AWS_CONFIG_FILE + ")")
 
 	command_args = parser.parse_args()
 

@@ -59,26 +59,7 @@ def posix(command_args):
 		sys.exit(1)
 
 
-	workspace_objs = list()
-
-
-	# If we were given a workspace name, only use that one
-	if command_args.workspace_name is not None:
-		workspace_obj_file_path = command_args.posix_storage + os.path.sep + "." + command_args.workspace_name + ".pkl"
-
-		if os.path.exists(workspace_obj_file_path):
-			with open(workspace_obj_file_path, "rb") as workspace_obj_file_path_handle:
-				workspace_obj = pickle.load(workspace_obj_file_path_handle)
-
-			workspace_objs.append(workspace_obj)
-
-		else:
-			print("No workspace object file found for workspace", command_args.workspace_name, file=sys.stderr)
-
-			sys.exit(1)
-
-	else:
-		workspace_objs = wm.get_workspaces.posix(command_args)
+	workspace_objs = wm.get_workspaces.posix(command_args)
 
 
 	for workspace_obj in workspace_objs:

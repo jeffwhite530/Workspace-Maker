@@ -48,33 +48,14 @@ def posix(command_args):
 		print("DEBUG: Entering lsworkspace.posix")
 
 
-	workspace_objs = list()
-
-
-	# If we were given a workspace name, only use that one
-	if command_args.workspace_name is not None:
-		workspace_obj_file_path = command_args.posix_storage + os.path.sep + "." + command_args.workspace_name + ".pkl"
-
-		if os.path.exists(workspace_obj_file_path):
-			with open(workspace_obj_file_path, "rb") as workspace_obj_file_path_handle:
-				workspace_obj = pickle.load(workspace_obj_file_path_handle)
-
-			workspace_objs.append(workspace_obj)
-
-		else:
-			print("No workspace object file found for workspace", command_args.workspace_name, file=sys.stderr)
-
-			sys.exit(1)
-
-	else:
-		workspace_objs = wm.get_workspaces.posix(command_args)
-
-
-	our_workspace_objs = list()
-	current_user_uid = os.getuid()
+	workspace_objs = wm.get_workspaces.posix(command_args)
 
 
 	# If we are not root and the workspace is not ours, skip it
+	our_workspace_objs = list()
+
+	current_user_uid = os.getuid()
+
 	for workspace_obj in workspace_objs:
 		if current_user_uid != 0 and workspace_obj.uid != current_user_uid:
 			if command_args.debug_mode is True:
@@ -84,10 +65,12 @@ def posix(command_args):
 
 		our_workspace_objs.append(workspace_obj)
 
+	workspace_objs = our_workspace_objs
+
 
 	# Show the workspaces, ordered by expiration date
-	our_workspace_objs.sort(key=lambda x: x.expiration_datetime, reverse=True)
+	workspace_objs.sort(key=lambda x: x.expiration_datetime, reverse=True)
 
-	for workspace_obj in our_workspace_objs:
+	for workspace_obj in workspace_objs:
 		print("Workspace", workspace_obj.path, "will expire on", workspace_obj.expiration_pretty)
 

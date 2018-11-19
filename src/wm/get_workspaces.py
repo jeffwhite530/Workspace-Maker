@@ -96,5 +96,16 @@ def posix(command_args):
 		workspace_objs.append(workspace_obj)
 
 
+	# If we were given a workspace name, only use that one
+	if command_args.workspace_name is not None:
+		new_workspace_objs = list()
+
+		for workspace_obj in workspace_objs:
+			if workspace_obj.name == command_args.workspace_name:
+				new_workspace_objs.append(workspace_obj)
+
+		workspace_objs = new_workspace_objs
+
+
 	return workspace_objs
 

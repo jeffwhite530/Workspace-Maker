@@ -3,12 +3,12 @@ Workspace Maker
 
 **Please note this project is a proof-of-concept.  Due to an inherent security flaw it should not be used in production environments or where untrusted users have the ability to inject their own Python modules (e.g. by setting PYTHONPATH to a directory they have write access to).**
 
-Workspace Maker is a utility to manage access to a shared storage system and was designed for HPC clusters.  Often an HPC cluster will have a shared storage area, for example: /scratch.  Usually, all researchers using the cluster have write access to it and simply create files and directories wherever they want.  This leads to a few problems:
+Workspace Maker is a utility to manage access to a shared storage system and was designed for use in HPC clusters.  Often an HPC cluster will have a shared storage area, for example: /scratch.  Usually, all researchers using the cluster have write access to it and simply create files and directories wherever they want.  This leads to a few problems:
 
-* What happens when a researcher leaves the company/university and their data is still on it?  Where is it in the filesystem?  How do we know it was that person's data and not someone else's?
-* How do we enforce time limits on data stored there?  We can't just run `find /scratch -mtime +14 -exec rm -rf '{}' \;` because the researchers can simply touch their files everyday and keep them forever.  Also, that method can remove parts of a dataset while leaving other files alone.
+* What happens when a researcher leaves the company/university and their data is still on it?  Where is it in the filesystem?  How do we know nobody else is using that data?
+* How do we enforce time limits on data stored there?  We can't just run `find /scratch -mtime +14 -exec rm -rf '{}' \;` because the researchers can simply `touch` their files everyday and keep them forever.  Also, that method can remove parts of a dataset while leaving other files alone.
 
-Workspace Maker solves that problem by forcing each researcher to create a *workspace* to store their data in.  A workspace is simply a directory with an expiration date.
+Workspace Maker solves these problems by having each researcher to create a *workspace* to store their data in.  A workspace is simply a directory with an expiration date.
 
 
 Usage Example
